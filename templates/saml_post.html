@@ -1,0 +1,20 @@
+<!doctype html>
+<html>
+  <head>
+    <title>SAML Response</title>
+  </head>
+  <body onload="document.forms[0].submit()">
+    <form method="post" action="{{ action }}">
+      <input type="hidden" name="SAMLResponse" value="{{ saml_response }}" />
+      <noscript>
+        <p>
+          JavaScript is disabled. Please click the button below to continue.
+        </p>
+        <input type="submit" value="Continue" />
+      </noscript>
+    </form>
+    <p style="text-align: center; font-family: sans-serif; color: #666">
+      Redirecting to application...
+    </p>
+  </body>
+</html>
