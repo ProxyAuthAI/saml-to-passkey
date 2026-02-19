@@ -316,21 +316,16 @@ def saml_response():
 
     try:
         # Create SAML response
-        response_args = {
-            'in_response_to': saml_request['id'],
-            'destination': saml_request['destination'],
-            'sp_entity_id': saml_request['issuer'],
-            'name_id': authenticated_user['email'],
-        }
-
-        info = saml_handler.idp.create_authn_response(
-            identity={
-                'email': [authenticated_user['email']],
-                'uid': [authenticated_user['user_id']],
-            },
-            userid=authenticated_user['email'],
-            **response_args
+        saml_response_data = saml_handler.create_authn_response(
+            user_id=authenticated_user['user_id'],
+            email=authenticated_user['email'],
+            request_id=saml_request['id'],
+            destination=saml_request['destination'],
+            sp_entity_id=saml_request['issuer']
         )
+
+        if not saml_response_data:
+            raise Exception("Failed to create SAML response")
 
         # Clear session
         session.pop('saml_session_id', None)
@@ -340,7 +335,7 @@ def saml_response():
         # Return HTML form that auto-submits to SP
         return render_template('saml_post.html',
                                action=saml_request['destination'],
-                               saml_response=info['data'])
+                               saml_response=saml_response_data)
 
     except Exception as e:
         print(f"Error creating SAML response: {e}")

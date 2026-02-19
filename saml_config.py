@@ -34,6 +34,9 @@ def get_saml_config():
         'attribute_map_dir': './saml_attribute_maps',
         'metadata': {
             'local': [],
+            'remote': [{
+                'url': 'http://localhost:3000/saml/metadata'
+            }],
         },
     }
 
