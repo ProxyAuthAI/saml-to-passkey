@@ -128,7 +128,13 @@ class SAMLHandler:
                 **resp_args
             )
 
-            return response
+            # Base64 encode the response for HTTP-POST binding
+            if isinstance(response, str):
+                response_bytes = response.encode('utf-8')
+            else:
+                response_bytes = response
+
+            return base64.b64encode(response_bytes).decode('utf-8')
         except Exception as e:
             print(f"Error creating SAML response: {e}")
             return None
